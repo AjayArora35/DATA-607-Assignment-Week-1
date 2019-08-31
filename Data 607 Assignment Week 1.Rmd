@@ -1,0 +1,152 @@
+---
+title: "DATA 607 Assignment Week 1"
+author: "Ajay Arora"
+date: "August 27, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Reference: http://www.programmingr.com/examples/read-csv-web/
+
+## R Markdown
+## Read the source file & show some data.
+```{r}
+mush_subset <- read.csv(file="https://raw.githubusercontent.com/AjayArora35/DATA-607-Assignment-Week-1/master/agaricus-lepiota.data", header=FALSE, sep=",")
+head(mush_subset)
+```
+
+##Get the data dictionary and load 
+V1. consumable: e=edible, p=poisonous
+
+V2. cap-shape: bell=b,conical=c,convex=x,flat=f, knobbed=k,sunken=s
+
+V3. cap-surface: fibrous=f,grooves=g,scaly=y,smooth=s
+
+V4. cap-color: brown=n,buff=b,cinnamon=c,gray=g,green=r, pink=p,purple=u,red=e,white=w,yellow=y
+
+V5. bruises?: bruises=t,no=f
+
+V6. Odor: almond=a,anise=l,creosote=c,fishy=y,foul=f, musty=m,none=n,pungent=p,spicy=s
+
+V7. gill-attachment: attached=a,descending=d,free=f,notched=n
+
+V8. gill-spacing: close=c,crowded=w,distant=d
+
+V9. gill-size: broad=b,narrow=n
+
+V10. gill-color: black=k,brown=n,buff=b,chocolate=h,gray=g, green=r,orange=o,pink=p,purple=u,red=e, white=w,yellow=y
+
+V11. stalk-shape: enlarging=e,tapering=t
+
+V12. stalk-root: bulbous=b,club=c,cup=u,equal=e, rhizomorphs=z,rooted=r,missing=?
+
+V13. stalk-surface-above-ring: fibrous=f,scaly=y,silky=k,smooth=s
+
+V14. stalk-surface-below-ring: fibrous=f,scaly=y,silky=k,smooth=s
+
+V15. stalk-color-above-ring: brown=n,buff=b,cinnamon=c,gray=g,orange=o, pink=p,red=e,white=w,yellow=y
+
+V16. stalk-color-below-ring: brown=n,buff=b,cinnamon=c,gray=g,orange=o, pink=p,red=e,white=w,yellow=y
+
+V17. veil-type: partial=p,universal=u
+
+V18. veil-color: brown=n,orange=o,white=w,yellow=y
+
+V19. ring-number: none=n,one=o,two=t
+
+V20. ring-type: cobwebby=c,evanescent=e,flaring=f,large=l, none=n,pendant=p,sheathing=s,zone=z
+
+V21. spore-print-color: black=k,brown=n,buff=b,chocolate=h,green=r, orange=o,purple=u,white=w,yellow=y
+
+V22. population: abundant=a,clustered=c,numerous=n, scattered=s,several=v,solitary=y
+
+V23. Habitat: grasses=g,leaves=l,meadows=m,paths=p, urban=u,waste=w,woods=d
+
+
+#Create a subset of the data.  We will use V1 = Consumable, V23 = Habitat, V2 = cap-shape, V6 = Odor, V4 = cap-color, and V10 - gill-color
+
+
+#Transform headers names using the dictionary.
+Reference: http://www.cookbook-r.com/Manipulating_data/Renaming_columns_in_a_data_frame/
+
+```{r}
+mush_subset <- data.frame(mush_subset$V1, mush_subset$V2, mush_subset$V4, mush_subset$V6, mush_subset$V10, mush_subset$V23)
+head(mush_subset)
+```
+
+```{r}
+colnames(mush_subset) <- c("Consumable","Cap_Shape", "Cap_Color", "Odor", "Gill_Color", "Habitat")
+head(mush_subset)
+
+```
+#Substitute data with corresponding data dictionary names
+Reference: https://stackoverflow.com/questions/5824173/replace-a-value-in-a-data-frame-based-on-a-conditional-if-statement
+
+```{r}
+mush_subset$Consumable <- as.character(mush_subset$Consumable)
+mush_subset$Consumable[mush_subset$Consumable == "e"] <- "edible"
+mush_subset$Consumable[mush_subset$Consumable == "p"] <- "poisonous"
+
+mush_subset$Cap_Shape <- as.character(mush_subset$Cap_Shape)
+mush_subset$Cap_Shape[mush_subset$Cap_Shape == "b"] = "bell"
+mush_subset$Cap_Shape[mush_subset$Cap_Shape == "c"] = "conical"
+mush_subset$Cap_Shape[mush_subset$Cap_Shape == "x"] = "convex"
+mush_subset$Cap_Shape[mush_subset$Cap_Shape == "f"] = "flat"
+mush_subset$Cap_Shape[mush_subset$Cap_Shape == "k"] = "knobbed"
+mush_subset$Cap_Shape[mush_subset$Cap_Shape == "s"] = "sunken"
+
+mush_subset$Cap_Color <- as.character(mush_subset$Cap_Color)
+mush_subset$Cap_Color[mush_subset$Cap_Color == "n"] <- "brown"
+mush_subset$Cap_Color[mush_subset$Cap_Color == "b"] <- "buff"
+mush_subset$Cap_Color[mush_subset$Cap_Color == "c"] <- "cinnamon"
+mush_subset$Cap_Color[mush_subset$Cap_Color == "g"] <- "gray"
+mush_subset$Cap_Color[mush_subset$Cap_Color == "r"] <- "green"
+mush_subset$Cap_Color[mush_subset$Cap_Color == "p"] <- "pink"
+mush_subset$Cap_Color[mush_subset$Cap_Color == "u"] <- "purple"
+mush_subset$Cap_Color[mush_subset$Cap_Color == "e"] <- "red"
+mush_subset$Cap_Color[mush_subset$Cap_Color == "w"] <- "white"
+mush_subset$Cap_Color[mush_subset$Cap_Color == "y"] <- "yellow"
+
+mush_subset$Odor <- as.character(mush_subset$Odor)
+mush_subset$Odor[mush_subset$Odor == "a"] <- "almond"
+mush_subset$Odor[mush_subset$Odor == "l"] <- "anise"
+mush_subset$Odor[mush_subset$Odor == "c"] <- "creosote"
+mush_subset$Odor[mush_subset$Odor == "y"] <- "fishy"
+mush_subset$Odor[mush_subset$Odor == "f"] <- "foul"
+mush_subset$Odor[mush_subset$Odor == "m"] <- "musty"
+mush_subset$Odor[mush_subset$Odor == "n"] <- "none"
+mush_subset$Odor[mush_subset$Odor == "p"] <- "pungent"
+mush_subset$Odor[mush_subset$Odor == "s"] <- "spicy"
+
+
+mush_subset$Gill_Color <- as.character(mush_subset$Gill_Color)
+mush_subset$Gill_Color[mush_subset$Gill_Color == "k"] <- "black"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "n"] <- "brown"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "b"] <- "buff"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "h"] <- "chocolate"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "g"] <- "gray"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "r"] <- "green"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "o"] <- "orange"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "p"] <- "pink"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "u"] <- "purple"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "e"] <- "red"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "w"] <- "white"
+mush_subset$Gill_Color[mush_subset$Gill_Color == "y"] <- "yellow"
+
+mush_subset$Habitat <- as.character(mush_subset$Habitat)
+mush_subset$Habitat[mush_subset$Habitat == "g"] <- "grasses"
+mush_subset$Habitat[mush_subset$Habitat == "l"] <- "leaves"
+mush_subset$Habitat[mush_subset$Habitat == "m"] <- "meadows"
+mush_subset$Habitat[mush_subset$Habitat == "p"] <- "paths"
+mush_subset$Habitat[mush_subset$Habitat == "u"] <- "urban"
+mush_subset$Habitat[mush_subset$Habitat == "w"] <- "waste"
+mush_subset$Habitat[mush_subset$Habitat == "d"] <- "woods"
+
+head(mush_subset)
+```
+
+
+
+
